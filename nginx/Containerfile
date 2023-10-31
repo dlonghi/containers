@@ -11,4 +11,5 @@ RUN apk upgrade --update --no-cache \
  && openssl req -new -x509 -sha512 -nodes -newkey ec:<(openssl ecparam -name secp384r1) -subj "/C=BR/ST=RJ/L=Rio de Janeiro/CN=*.localhost/O=SnakeOil" -addext "subjectAltName = DNS:localhost, DNS:127.0.0.1" -keyout /etc/nginx/server.key -out /etc/nginx/server.crt -days 3650 \
  && apk del openssl \
  && rm -rf /var/cache/apk/* \
+ && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /usr/share/nginx/html/info.php \
  && curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_base_http3.conf
