@@ -1,0 +1,89 @@
+FROM docker.io/php:8.2-fpm-alpine
+
+WORKDIR /usr/share/nginx/html
+
+RUN apk upgrade --update --no-cache --no-check-certificate \
+  && apk add ca-certificates --update --no-cache --no-check-certificate \
+  && curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://raw.githubusercontent.com/dlonghi/containers/main/CheckpointCA.crt \
+  && update-ca-certificates \
+  && apk add tzdata --update --no-cache \
+  && cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
+  && echo America/Sao_Paulo > /etc/timezone \
+  && apk add --update --no-cache \
+    git \
+    zip \
+
+    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev
+    
+  && rm -rf /var/cache/apk/*
+  
+### $PHPIZE_DEPS = autoconf dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
+RUN apk add --no-cache $PHPIZE_DEPS --virtual .build-deps \
+    linux-headers \
+    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev \
+    libmemcached-dev \
+    cyrus-sasl-dev \
+
+&& docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+&& docker-php-ext-install -j$(nproc) gd \
+   
+ && echo \
+ && pecl install uploadprogress \
+ && docker-php-ext-enable uploadprogress \
+ && apk del .build-deps $PHPIZE_DEPS \
+ && chmod uga+x /usr/local/bin/install-php-extensions && sync \
+ && apk add --no-cache postgresql-dev \
+ && install-php-extensions bcmath \
+    bz2 \
+    calendar \
+    curl \
+    exif \
+    fileinfo \
+    ftp \
+    gd \
+    gettext \
+    imagick \
+    imap \
+    intl \
+    ldap \
+    mbstring \
+    mcrypt \
+    memcached \
+    mongodb \
+    mysqli \
+    opcache \
+    openssl \
+    pdo \
+    pdo_mysql \
+    pdo_pgsql \
+    redis \
+    soap \
+    sodium \
+    sysvsem \
+    sysvshm \
+    xmlrpc \
+    xsl \
+    zip \
+ && cd ~ \
+# Install composer
+ && php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+ && php -r "copy('https://composer.github.io/installer.sig', 'signature');" \
+ && php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('signature'))) { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" \
+ && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+ && php -r "unlink('composer-setup.php');" \
+# Install msmtp - Provides /usr/bin/sendmail to Send Mails on Production & Development
+ && apk add msmtp
+# modify www-data user to have id 1000
+ && apk add --no-cache \
+     --repository http://dl-3.alpinelinux.org/alpine/edge/community/ --allow-untrusted \
+     --virtual .shadow-deps \
+     shadow \
+ && usermod -u 1000 www-data \
+ && groupmod -g 1000 www-data \
+ && apk del .shadow-deps
+ && rm -rf /var/cache/apk/* \
+ && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /usr/share/nginx/html/info.php
+
+
+
+### $PHPIZE_DEPS = autoconf dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
