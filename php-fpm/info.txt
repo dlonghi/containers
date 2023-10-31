@@ -39,3 +39,59 @@ xmlwriter
 zlib
 
 [Zend Modules]
+
+
+https://git.trf4.jus.br/eproc/eproc2/-/blob/master/.docker/php-fpm/Dockerfile
+
+
+configure: WARNING: OCI8 extension: ORACLE_HOME is not set, looking for default Oracle Instant Client instead
+checking Oracle Instant Client directory... configure: error: Oracle Instant Client directory /usr/lib/oracle/.../client64/lib libraries not found. Try --with-oci8=instantclient,DIR
+
+
+
+
+## Original
+/var/www/html # cat /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini
+zend_extension=opcache.so
+
+### ORIGINAL
+/usr/local/etc/php-fpm.d # ls -l /usr/local/etc/php-fpm.d
+total 56
+-rw-r--r--    1 root     root           428 Oct 27 23:11 docker.conf
+-rw-r--r--    1 root     root         22096 Oct 27 23:11 www.conf
+-rw-r--r--    1 root     root         22096 Oct 27 23:11 www.conf.default
+-rw-r--r--    1 root     root            45 Oct 27 23:11 zz-docker.conf
+/usr/local/etc/php-fpm.d # cat docker.conf | egrep -v '^;|^$'
+[global]
+error_log = /proc/self/fd/2
+log_limit = 8192
+[www]
+access.log = /proc/self/fd/2
+clear_env = no
+catch_workers_output = yes
+decorate_workers_output = no
+/usr/local/etc/php-fpm.d # cat www.conf | egrep -v '^;|^$'
+[www]
+user = www-data
+group = www-data
+listen = 127.0.0.1:9000
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+/usr/local/etc/php-fpm.d # cat www.conf.default  | egrep -v '^;|^$'
+[www]
+user = www-data
+group = www-data
+listen = 127.0.0.1:9000
+pm = dynamic
+pm.max_children = 5
+pm.start_servers = 2
+pm.min_spare_servers = 1
+pm.max_spare_servers = 3
+/usr/local/etc/php-fpm.d # cat zz-docker.conf  | egrep -v '^;|^$'
+[global]
+daemonize = no
+[www]
+listen = 9000
