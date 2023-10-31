@@ -1,0 +1,6 @@
+podman rmi -f localhost/nginx:1.25-alpine-custom
+
+podman build -t localhost/nginx:1.25-alpine-custom .
+
+podman run --rm -it --name=nginx-custom -p 88:80 -p 444:443 localhost/nginx:1.25-alpine-custom
+
