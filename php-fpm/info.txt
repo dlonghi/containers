@@ -5,6 +5,19 @@ podman run -dt --name=larapp-phpfpm-1 --net=host localhost/phpcustom
 podman logs -f laraap-phpfpm-1
 
 
+podman rmi -f localhost/php
+
+podman rmi -f localhost/phpfpm:latest
+podman build -t localhost/phpfpm:latest -f Containerfile_eproc.dev
+
+podman run --rm -it --name=phpfpm_latest --net=host localhost/phpfpm:latest
+
+podman run --rm -it --name=nginx_temp --net=host localhost/nginx:1.25-alpine-custom
+
+
+
+
+
 #### PHP modules already included
 
 /var/www/html # php -m
