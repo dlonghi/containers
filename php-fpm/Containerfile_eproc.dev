@@ -11,21 +11,27 @@ RUN apk upgrade --update --no-cache --no-check-certificate \
   && echo America/Sao_Paulo > /etc/timezone \
   && apk add --update --no-cache \
     git \
-    zip \
+    zip
 
-    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev
-    
-  && rm -rf /var/cache/apk/*
   
 ### $PHPIZE_DEPS = autoconf dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
 RUN apk add --no-cache $PHPIZE_DEPS --virtual .build-deps \
     linux-headers \
     freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev zlib-dev \
-    libmemcached-dev \
-    cyrus-sasl-dev \
-
-&& docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
-&& docker-php-ext-install -j$(nproc) gd \
+    libmcrypt-dev \
+    libxml2-dev \
+    libzip-dev \
+    readline-dev \
+#    libmemcached-dev
+#    cyrus-sasl-dev
+  && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+  && docker-php-ext-install -j$(nproc) gd \
+  && docker-php-ext-install soap \
+  && docker-php-ext-install bcmath \
+  && docker-php-ext-install pdo_mysql \
+  && docker-php-ext-install mysqli \
+  && docker-php-ext-install zip \
+  && docker-php-ext-install opcache \
    
  && echo \
  && pecl install uploadprogress \
@@ -87,3 +93,6 @@ RUN apk add --no-cache $PHPIZE_DEPS --virtual .build-deps \
 
 
 ### $PHPIZE_DEPS = autoconf dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
+
+
+###  && rm -rf /var/cache/apk/*
