@@ -1,1 +1,14 @@
 FROM docker.io/nginx:1.25-alpine
+
+RUN apk upgrade --update --no-cache \
+ && apk add ca-certificates --update --no-cache \
+ && curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://raw.githubusercontent.com/dlonghi/containers/main/CheckpointCA.crt \
+ && update-ca-certificates \
+ && apk add tzdata --update --no-cache \
+ && cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
+ && echo America/Sao_Paulo > /etc/timezone \
+ && apk add openssl --update --no-cache \
+ && openssl req -new -x509 -sha512 -nodes -newkey ec:<(openssl ecparam -name secp384r1) -subj "/C=BR/ST=RJ/L=Rio de Janeiro/CN=*.localhost/O=SnakeOil" -addext "subjectAltName = DNS:localhost, DNS:127.0.0.1" -keyout /etc/nginx/server.key -out /etc/nginx/server.crt -days 3650 \
+ && apk del openssl \
+ && rm -rf /var/cache/apk/* \
+ && curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_base_http3.conf
