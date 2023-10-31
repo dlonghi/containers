@@ -8,8 +8,8 @@ RUN apk upgrade --update --no-cache --no-check-certificate \
   && update-ca-certificates \
   && apk add tzdata --update --no-cache \
   && cp /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
-  && echo America/Sao_Paulo > /etc/timezone
-### $PHPIZE_DEPS = autoconf dpkg-dev dpkg file g++ gcc libc-dev make pkgconf re2c
+  && echo America/Sao_Paulo > /etc/timezone \
+  && echo \
   && apk add --no-cache $PHPIZE_DEPS --virtual .build-deps \
     git \
     shadow \
@@ -37,16 +37,15 @@ RUN apk upgrade --update --no-cache --no-check-certificate \
   && echo \
   && pecl install uploadprogress \
   && docker-php-ext-enable uploadprogress \
-  && pecl install igbinary \
-  && docker-php-ext-enable igbinary \
   && pecl install memcached \
   && docker-php-ext-enable memcached \
   && pecl install redis \
   && docker-php-ext-enable redis \
-  && apk del .build-deps $PHPIZE_DEPS \
- && cd ~ \
- && usermod -u 1000 www-data \
- && groupmod -g 1000 www-data \
- && apk del $PHPIZE_DEPS .build-deps \
- && rm -rf /var/cache/apk/* \
- && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /usr/share/nginx/html/info.php
+  && echo \
+  && usermod -u 1000 www-data \
+  && groupmod -g 1000 www-data \
+  && echo \
+  && apk del $PHPIZE_DEPS .build-deps \
+  && rm -rf /var/cache/apk/* \
+  && echo \
+  && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /usr/share/nginx/html/info.php
