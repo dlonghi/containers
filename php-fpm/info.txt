@@ -61,6 +61,8 @@ total 56
 -rw-r--r--    1 root     root         22096 Oct 27 23:11 www.conf
 -rw-r--r--    1 root     root         22096 Oct 27 23:11 www.conf.default
 -rw-r--r--    1 root     root            45 Oct 27 23:11 zz-docker.conf
+
+
 /usr/local/etc/php-fpm.d # cat docker.conf | egrep -v '^;|^$'
 [global]
 error_log = /proc/self/fd/2
@@ -70,6 +72,8 @@ access.log = /proc/self/fd/2
 clear_env = no
 catch_workers_output = yes
 decorate_workers_output = no
+
+
 /usr/local/etc/php-fpm.d # cat www.conf | egrep -v '^;|^$'
 [www]
 user = www-data
@@ -80,6 +84,8 @@ pm.max_children = 5
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3
+
+
 /usr/local/etc/php-fpm.d # cat www.conf.default  | egrep -v '^;|^$'
 [www]
 user = www-data
@@ -90,6 +96,8 @@ pm.max_children = 5
 pm.start_servers = 2
 pm.min_spare_servers = 1
 pm.max_spare_servers = 3
+
+
 /usr/local/etc/php-fpm.d # cat zz-docker.conf  | egrep -v '^;|^$'
 [global]
 daemonize = no
