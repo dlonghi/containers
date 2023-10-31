@@ -1,3 +1,10 @@
+podman run -dt --name=laraap-nginx-1 --net=host localhost/nginx
+podman logs -f laraap-nginx-1
+
+podman run -dt --name=larapp-phpfpm-1 --net=host localhost/phpcustom
+podman logs -f laraap-phpfpm-1
+
+
 #### PHP modules already included
 
 /var/www/html # php -m
