@@ -2,6 +2,7 @@ podman rmi -f localhost/phpfpm:latest
 
 podman build -t localhost/phpfpm:latest -f Containerfile_debian .
 
+podman rm -f phpfpm_latest
 
 podman run --rm -it --name=phpfpm_latest --net=host -e "XDEBUG_MODE=off" localhost/phpfpm:latest
 
