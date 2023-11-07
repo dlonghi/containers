@@ -1,6 +1,6 @@
 FROM docker.io/php:8.2-fpm-alpine
 
-WORKDIR /usr/share/nginx/html
+WORKDIR /app
 
 RUN apk upgrade --update --no-check-certificate \
   && apk add ca-certificates --update --no-cache --no-check-certificate \
