@@ -1,3 +1,40 @@
+podman rmi -f localhost/phpfpm:latest
+
+podman build -t localhost/phpfpm:latest -f Containerfile_debian .
+
+
+podman run --rm -it --name=phpfpm_latest --net=host -e "XDEBUG_MODE=off" localhost/phpfpm:latest
+
+
+podman rmi -f localhost/nginxalpine:latest
+
+podman build -t localhost/nginxalpine:latest -f Containerfile_nginx_alpine .
+
+
+
+podman run --rm -it --name=nginx_temp --net=host localhost/nginxalpine:latest
+
+podman rm -f nginx_temp
+
+podman run --rm -it --name=nginx_temp --net=host -e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"' localhost/nginxalpine:latest
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 podman run -dt --name=laraap-nginx-1 --net=host localhost/nginx
 
