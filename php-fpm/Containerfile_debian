@@ -49,4 +49,4 @@ RUN apt-get update \
   && mkdir /app/public \
   && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/info.php \
   && echo \
-  && apt-get purge -y build-essential $PHPIZE_DEPS && apt-get autoremove -y && apt-get clean
+  && apt-get purge -y build-essential && apt-get autoremove -y && apt-get clean
