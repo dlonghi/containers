@@ -29,11 +29,33 @@ podman run --rm -it --name=nginx_temp --net=host localhost/nginxalpine:latest
 
 
 
+cat <<'EOF' > info.php
+<?php
+
+echo '<pre>';
+echo '1234';
+echo '</pre>';
+
+echo '<pre>';
+print_r(get_defined_vars());
+echo '</pre>';
+
+echo '<pre>';
+echo 'phpinfo();';
+echo '</pre>';
+phpinfo();
+echo '<pre>';
+echo 'xdebug_info();';
+echo '</pre>';
+xdebug_info();
+echo '<pre>';
+echo 'zzzz';
+echo '</pre>';
+
+EOF
 
 
-
-
-
+cat info.php
 
 
 
