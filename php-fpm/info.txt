@@ -1,8 +1,12 @@
+
 podman run -dt --name=laraap-nginx-1 --net=host localhost/nginx
+
 podman logs -f laraap-nginx-1
 
 podman run -dt --name=larapp-phpfpm-1 --net=host localhost/phpcustom
 podman logs -f laraap-phpfpm-1
+
+-e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"'
 
 
 podman rmi -f localhost/php
