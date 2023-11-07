@@ -23,6 +23,7 @@ RUN apt-get update \
     libwebp-dev \
     libpng-dev \
     libmagickwand-dev \
+    libgomp1 \
     libpq-dev \
     libmemcached-dev \
     libxslt-dev \
