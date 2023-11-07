@@ -12,7 +12,6 @@ RUN apt-get update \
   && groupmod -g 1000 www-data \
   && apt-get install -y --no-install-recommends \
     build-essential \
-	$PHPIZE_DEPS \
     git \
     curl \
     zip \
@@ -23,7 +22,6 @@ RUN apt-get update \
     libwebp-dev \
     libpng-dev \
     libmagickwand-dev \
-    libgomp1 \
     libpq-dev \
     libmemcached-dev \
     libxslt-dev \
@@ -47,6 +45,6 @@ RUN apt-get update \
   && docker-php-ext-enable xdebug \
   && echo \
   && mkdir /app/public \
-  && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/info.php \
+  && echo '<?php echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/info.php \
   && echo \
   && apt-get purge -y build-essential && apt-get autoremove -y && apt-get clean
