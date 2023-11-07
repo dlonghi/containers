@@ -1,10 +1,53 @@
 FROM php:8.2-fpm
 
-RUN apt-get update && apt-get install -y \
-		libfreetype-dev \
-		libjpeg62-turbo-dev \
-		libpng-dev \
-	&& docker-php-ext-configure gd --with-freetype --with-jpeg \
-	&& docker-php-ext-install -j$(nproc) gd
+ENV TZ=America/Sao_Paulo
 
-# https://hub.docker.com/_/php
+WORKDIR /app
+
+RUN apt-get update \
+  && apt-get install -y ca-certificates tzdata \
+  && curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://raw.githubusercontent.com/dlonghi/containers/main/CheckpointCA.crt \
+  && update-ca-certificates \
+  && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
+  && echo \
+  && apt-get install -y shadow \
+  && usermod -u 1000 www-data \
+  && groupmod -g 1000 www-data \
+  && apt-get purge -y shadow \
+  && echo \
+  && apt-get install -y --no-install-recommends \
+    build-essential \
+    git \
+    curl \
+    zip \
+    unzip \
+    libfreetype-dev \
+    libjpeg62-turbo-dev \
+    libwebp-dev \
+    libpng-dev \
+    libmagickwand-dev \
+    libpq-dev \
+    libmemcached-dev \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+  && docker-php-ext-install -j$(nproc) gd \
+  && docker-php-ext-install soap \
+  && docker-php-ext-install bcmath \
+  && docker-php-ext-install mysqli \
+  && docker-php-ext-install pdo_mysql \
+  && docker-php-ext-install pdo_pgsql \
+  && docker-php-ext-install zip \
+  && docker-php-ext-install opcache \
+  && docker-php-ext-install xsl \
+  && pecl install imagick \
+  && docker-php-ext-enable imagick \
+  && pecl install memcached \
+  && docker-php-ext-enable memcached \
+  && pecl install redis \
+  && docker-php-ext-enable redis \
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+  && echo \
+  & mkdir /app/public \
+  && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/info.php \
+  && echo \
+  && apt-get purge build-essential && apt-get autoremove && apt-get clean
