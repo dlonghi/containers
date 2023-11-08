@@ -1,26 +1,23 @@
-podman rmi -f localhost/phpfpm:latest
 
-podman build -t localhost/phpfpm:latest -f Containerfile_debian .
+podman rmi -f localhost/phpfpm-custom:latest
+podman build --build-arg="AMBIENTE=dev" -t localhost/phpfpm-custom:latest -f Containerfile_debian .
+podman build -t localhost/phpfpm-custom:latest -f Containerfile_debian .
 
-podman rm -f phpfpm_latest
-
-podman run --rm -it --name=phpfpm_latest --net=host -e "XDEBUG_MODE=off" localhost/phpfpm:latest
-
-podman run --rm -it --name=phpfpm_latest --net=host -e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"' localhost/phpfpm:latest
-
-podman rmi -f localhost/nginxalpine:latest
-
-podman build -t localhost/nginxalpine:latest -f Containerfile_nginx_alpine .
+podman rm -f phpfpmz
+podman run --rm -it --name=phpfpmz --net=host -e "XDEBUG_MODE=off" localhost/phpfpm-custom:latest
 
 
+podman run --rm -it --name=phpfpmz --net=host -e "XDEBUG_MODE=off" localhost/phpfpm-custom:latest
 
-podman run --rm -it --name=nginx_temp --net=host localhost/nginxalpine:latest
+podman run --rm -it --name=phpfpmz --net=host -e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"' localhost/phpfpm-custom:latest
 
-podman rm -f nginx_temp
+#######
 
-podman run --rm -it --name=nginx_temp --net=host localhost/nginxalpine:latest
+podman rmi -f localhost/nginx-custom:latest
+podman build -t localhost/nginx-custom:latest -f Containerfile_nginx_debian .
 
-
+podman rm -f nginxz
+podman run --rm -it --name=nginxz --net=host localhost/nginx-custom:latest
 
 
 
