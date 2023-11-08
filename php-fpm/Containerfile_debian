@@ -1,6 +1,7 @@
 FROM docker.io/php:8.2-fpm
 
 ENV TZ=America/Sao_Paulo
+ARG AMBIENTE=prd
 
 WORKDIR /app
 
@@ -41,10 +42,13 @@ RUN apt-get update \
   && docker-php-ext-enable memcached \
   && pecl install redis \
   && docker-php-ext-enable redis \
-  && pecl install xdebug \
-  && docker-php-ext-enable xdebug \
   && echo \
   && mkdir /app/public \
   && echo '<?php echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/info.php \
   && echo \
   && apt-get purge -y build-essential && apt-get autoremove -y && apt-get clean
+
+RUN if [ ${AMBIENTE} = "dev" ]; then \
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+;fi
