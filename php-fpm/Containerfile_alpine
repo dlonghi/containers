@@ -1,5 +1,6 @@
 FROM docker.io/php:8.2-fpm-alpine
 
+ARG AMBIENTE=prd
 WORKDIR /app
 
 RUN apk upgrade --update --no-check-certificate \
@@ -59,8 +60,6 @@ RUN apk upgrade --update --no-check-certificate \
   && docker-php-ext-enable memcached \
   && pecl install redis \
   && docker-php-ext-enable redis \
-  && pecl install xdebug \
-  && docker-php-ext-enable xdebug \
   && echo \
   & mkdir /app/public \
   && echo '<?php echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/info.php \
@@ -68,4 +67,7 @@ RUN apk upgrade --update --no-check-certificate \
   && apk del $PHPIZE_DEPS .build-deps \
   && rm -rf /var/cache/apk/*
 
-COPY . /app
+RUN if [ ${AMBIENTE} = "dev" ]; then \
+  && pecl install xdebug \
+  && docker-php-ext-enable xdebug \
+;fi
