@@ -25,6 +25,7 @@ RUN apt-get update \
     libmagickwand-dev \
     libpq-dev \
     libmemcached-dev \
+    libxml2-dev  
     libxslt-dev \
     libbz2-dev \
   && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
@@ -38,6 +39,14 @@ RUN apt-get update \
   && docker-php-ext-install opcache \
   && docker-php-ext-install xsl \
   && docker-php-ext-install bz2 \
+  && docker-php-ext-install exif \
+  && docker-php-ext-install gettext \
+  && docker-php-ext-install calendar \
+  && docker-php-ext-install intl \
+  && docker-php-ext-install msgpack \
+  && docker-php-ext-install shmop \
+  && pecl install igbinary \
+  && docker-php-ext-enable igbinary \
   && pecl install imagick \
   && docker-php-ext-enable imagick \
   && pecl install memcached \
