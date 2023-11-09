@@ -49,6 +49,6 @@ RUN apt-get update \
   && apt-get purge -y build-essential && apt-get autoremove -y && apt-get clean
 
 RUN if [ ${AMBIENTE} = "dev" ]; then \
-  && pecl install xdebug \
+  pecl install xdebug \
   && docker-php-ext-enable xdebug \
 ;fi
