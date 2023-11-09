@@ -26,6 +26,7 @@ RUN apt-get update \
     libpq-dev \
     libmemcached-dev \
     libxslt-dev \
+    libbz2-dev \
   && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
   && docker-php-ext-install -j$(nproc) gd \
   && docker-php-ext-install soap \
@@ -36,6 +37,7 @@ RUN apt-get update \
   && docker-php-ext-install zip \
   && docker-php-ext-install opcache \
   && docker-php-ext-install xsl \
+  && docker-php-ext-install bz2 \
   && pecl install imagick \
   && docker-php-ext-enable imagick \
   && pecl install memcached \
