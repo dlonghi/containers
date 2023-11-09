@@ -1,7 +1,7 @@
 
 podman rmi -f localhost/phpfpm-custom:latest
-podman build --build-arg="AMBIENTE=dev" -t localhost/phpfpm-custom:latest -f Containerfile_debian .
-podman build -t localhost/phpfpm-custom:latest -f Containerfile_debian .
+podman build --build-arg="AMBIENTE=dev" -t localhost/phpfpm-custom:latest -f Containerfile_phpfpm_debian .
+podman build -t localhost/phpfpm-custom:latest -f Containerfile_phpfpm_debian .
 
 podman rm -f phpfpmz
 podman run --rm -it --name=phpfpmz --net=host -e "XDEBUG_MODE=off" localhost/phpfpm-custom:latest
