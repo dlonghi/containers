@@ -4,12 +4,12 @@ podman build --build-arg="AMBIENTE=dev" -t localhost/phpfpm-custom:latest -f Con
 podman build -t localhost/phpfpm-custom:latest -f Containerfile_phpfpm_debian .
 
 podman rm -f phpfpmz
-podman run --rm -it --name=phpfpmz --net=host -e "XDEBUG_MODE=off" localhost/phpfpm-custom:latest
+podman run --rm -it --name=phpfpm --net=host localhost/phpfpm-custom:latest
 
+podman rm -f phpfpmz-dev
+podman run --rm -it --name=phpfpmz-dev --net=host -e "XDEBUG_MODE=off" localhost/phpfpm-custom:latest
 
-podman run --rm -it --name=phpfpmz --net=host -e "XDEBUG_MODE=off" localhost/phpfpm-custom:latest
-
-podman run --rm -it --name=phpfpmz --net=host -e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"' localhost/phpfpm-custom:latest
+podman run --rm -it --name=phpfpmz-dev --net=host -e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"' localhost/phpfpm-custom:latest
 
 #######
 
