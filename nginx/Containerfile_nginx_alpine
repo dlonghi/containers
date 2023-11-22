@@ -13,4 +13,4 @@ RUN apk upgrade --update --no-cache --no-check-certificate \
  && rm -rf /var/cache/apk/* \
  && curl -ko /usr/share/nginx/html/favicon.ico https://raw.githubusercontent.com/dlonghi/containers/main/favicon.ico \
  && echo '<? echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /usr/share/nginx/html/info.php \
- && curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_base.conf
+ && curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_original_timed.conf
