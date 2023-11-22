@@ -22,3 +22,7 @@ podman run --rm -dt --pod=appy --name=phpfpm -v /mnt/d/workspaces/appy:/app -e '
 podman run --rm -dt --pod=appy --name=phpfpm -v /mnt/d/workspaces/appy:/app -e XDEBUG_MODE="debug,develop" -e "XDEBUG_CONFIG=client_host=172.25.208.1 client_port=9003 start_with_request=yes discover_client_host=false max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/stdout" localhost/phpfpm-custom-xdebug:latest
 
 podman run --rm -dt --pod=appy --name=phpfpm -v /mnt/d/workspaces/appy:/app -e XDEBUG_MODE="debug,develop" -e "XDEBUG_CONFIG=start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/stdout" localhost/phpfpm-custom-xdebug:latest
+
+
+
+
