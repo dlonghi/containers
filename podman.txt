@@ -1,3 +1,19 @@
+podman rmi -f localhost/nginx-custom:latest
+podman build -t localhost/nginx-custom:latest -f Containerfile_nginx_alpine .
+
 podman rmi -f localhost/phpfpm-custom:latest
+podman build --build-arg="XDEBUG=no" --build-arg="APM=no" --build-arg="WKHTMLTOPDF=yes" -t localhost/phpfpm-custom:latest -f Containerfile_phpfpm_debian .
+
+podman rmi -f localhost/phpfpm-custom-xdebug:latest
+podman build --build-arg="XDEBUG=yes" --build-arg="APM=yes" --build-arg="WKHTMLTOPDF=yes" -t localhost/phpfpm-custom-xdebug:latest -f Containerfile_phpfpm_debian .
 
 
+podman pod rm -f appy
+
+podman pod create --name=appy -p 80:80 -p 443:443 
+
+podman run --rm -dt --pod=appy --name=nginx -v /mnt/d/workspaces/appy:/app localhost/nginx-custom:latest
+
+#podman run --rm -dt --pod=appy --name=phpfpm -v /mnt/d/workspaces/appy:/app localhost/phpfpm-custom-xdebug:latest
+
+podman run --rm -dt --pod=appy --name=phpfpm -v /mnt/d/workspaces/appy:/app -e 'XDEBUG_MODE=debug,develop' -e 'XDEBUG_CONFIG="start_with_request=trigger discover_client_host=true max_nesting_level=512 idekey=PHPSTORM output_dir=/tmp log=/dev/console"' localhost/phpfpm-custom-xdebug:latest
