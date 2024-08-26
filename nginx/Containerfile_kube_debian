@@ -11,7 +11,6 @@ RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://raw.gith
  && groupmod -g 12000 nginx \
  && usermod -u 12000 -g 12000 nginx
 
-
 RUN curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_kube.conf \
  && mkdir -p /app/public \
  && curl -ko /app/public/index.html https://gist.githubusercontent.com/dlonghi/b53959ad2981d033e8c60f3dc6281c1b/raw/index_gray.html \
