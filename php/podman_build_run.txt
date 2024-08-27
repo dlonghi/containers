@@ -1,0 +1,36 @@
+
+
+cd ~/workspaces/containers/php
+
+### Debian container
+podman rmi -f localhost/php:8.2.22-fpm-custom
+
+podman build -t localhost/php:8.2.22-fpm-custom -f Containerfile_debian
+
+podman run --pod=appz -d --name=php_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/php:8.2.22-fpm-custom
+
+podman run --pod=appz -d --name=nginx_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/php:8.2.22-fpm-custom
+
+
+
+
+
+
+
+# Interesting
+https://github.com/eriksjolund/podman-nginx-socket-activation
+
+
+### podman v5 uses pasta networking, no need for slirp4netns
+## https://www.reddit.com/r/podman/comments/14lls6v/same_ip_address_for_all_incoming_connections_in
+# --network slirp4netns:port_handler=slirp4netns
+
+
+# docker.io/php:8.2.22-fpm
+
+
+
+podman pod create --name=appz -p 80:80/tcp -p 443:443/tcp -p 443:443/udp
+podman pod ps
+podman ps -a --pod
+
