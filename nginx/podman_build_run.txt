@@ -21,4 +21,6 @@ podman build -t localhost/nginx:1.27.1-alpine-custom -f Containerfile_kube_alpin
 podman run -it --rm --name=nginx_alpine -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/nginx:1.27.1-alpine-custom
 
 
-#
+
+# Interesting
+https://github.com/eriksjolund/podman-nginx-socket-activation
