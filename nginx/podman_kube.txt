@@ -1,4 +1,6 @@
 
+cd ~/workspaces/containers
+
 podman rmi -f localhost/nginx:1.27.1-debian-custom localhost/nginx:1.27.1-alpine-custom
 
 podman build -t localhost/nginx:1.27.1-debian-custom -f Containerfile_kube_debian
