@@ -7,7 +7,7 @@ cd ~/workspaces/containers
 ### Debian container
 podman rmi -f localhost/nginx:1.27.1-debian-custom localhost/nginx:1.27.1-alpine-custom
 
-podman build -t localhost/nginx:1.27.1-debian-custom -f Containerfile_kube_debian
+podman build -t localhost/nginx:1.27.1-debian-custom -f Containerfile_debian
 
 podman run -it --rm --name=nginx_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/nginx:1.27.1-debian-custom
 
@@ -16,7 +16,7 @@ podman run -it --rm --name=nginx_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/u
 ### Alpine container
 podman rmi -f localhost/nginx:1.27.1-alpine-custom localhost/nginx:1.27.1-debian-custom
 
-podman build -t localhost/nginx:1.27.1-alpine-custom -f Containerfile_kube_alpine
+podman build -t localhost/nginx:1.27.1-alpine-custom -f Containerfile_alpine
 
 podman run -it --rm --name=nginx_alpine -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/nginx:1.27.1-alpine-custom
 
