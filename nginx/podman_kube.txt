@@ -1,5 +1,5 @@
 
-podman rmi -f localhost/nginx:1.27.1-debian-custom
+podman rmi -f localhost/nginx:1.27.1-debian-custom localhost/nginx:1.27.1-alpine-custom
 
 podman build -t localhost/nginx:1.27.1-debian-custom -f Containerfile_kube_debian
 
@@ -11,7 +11,7 @@ podman run -it --rm --name=nginx_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/u
 
 
 
-podman rmi -f localhost/nginx:1.27.1-alpine-custom
+podman rmi -f localhost/nginx:1.27.1-alpine-custom localhost/nginx:1.27.1-debian-custom
 
 podman build -t localhost/nginx:1.27.1-alpine-custom -f Containerfile_kube_alpine
 
