@@ -1,0 +1,18 @@
+
+podman rmi -f localhost/nginx:1.27.1-debian-custom
+
+podman build -t localhost/nginx:1.27.1-debian-custom -f Containerfile_kube_debian
+
+podman run -it --rm --name=nginx_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/udp --network slirp4netns:port_handler=slirp4netns localhost/nginx:1.27.1-debian-custom
+
+### rootless container by default will use rootlessproxy and will not log the real source ip address
+### param bellow fixed it:
+# --network slirp4netns:port_handler=slirp4netns
+
+
+
+podman rmi -f localhost/nginx:1.27.1-alpine-custom
+
+podman build -t localhost/nginx:1.27.1-alpine-custom -f Containerfile_kube_alpine
+
+podman run -it --rm --name=nginx_alpine -p 80:80/tcp -p 443:443/tcp -p 443:443/udp --network slirp4netns:port_handler=slirp4netns localhost/nginx:1.27.1-alpine-custom
