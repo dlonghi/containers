@@ -17,7 +17,7 @@ RUN apk upgrade --update --no-cache --no-check-certificate \
  && apk del shadow \
  && rm -rf /var/cache/apk/*
 
-RUN curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_kube.conf \
+RUN curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_custom_http3.conf \
  && mkdir -p /app/public \
  && curl -ko /app/public/index.html https://raw.githubusercontent.com/dlonghi/containers/main/assets/index_flying_lights.html \
  && curl -ko /app/public/favicon.ico https://raw.githubusercontent.com/dlonghi/containers/main/assets/favicon_nginx.ico
