@@ -10,7 +10,6 @@ RUN apk upgrade --update --no-cache --no-check-certificate \
  && mkdir /opt/certs \
  && apk add openssl --update --no-cache \
  && openssl req -new -x509 -sha512 -nodes -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -subj "/C=BR/ST=DF/L=Brasilia/CN=*.localhost/O=SelfSignedCert" -addext "subjectAltName = DNS:localhost, DNS:127.0.0.1" -keyout /opt/certs/server.key -out /opt/certs/server.crt -days 3650 \
- && chmod 600 /opt/certs/server.key \
  && apk del openssl \
  && apk add shadow --update --no-cache \
  && groupmod -g 12000 nginx \
