@@ -16,3 +16,5 @@ podman rmi -f localhost/nginx:1.27.1-alpine-custom
 podman build -t localhost/nginx:1.27.1-alpine-custom -f Containerfile_kube_alpine
 
 podman run -it --rm --name=nginx_alpine -p 80:80/tcp -p 443:443/tcp -p 443:443/udp --network slirp4netns:port_handler=slirp4netns localhost/nginx:1.27.1-alpine-custom
+
+
