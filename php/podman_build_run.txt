@@ -2,17 +2,17 @@
 
 cd ~/workspaces/containers/php
 
+
+
 ### Debian container
+
+# podman rmi -f docker.io/library/php:8.2.22
+
 podman rmi -f localhost/php:8.2.22-fpm-custom
 
+podman rmi -f b9413712cfd2
+
 podman build -t localhost/php:8.2.22-fpm-custom -f Containerfile_debian
-
-podman run --pod=appz -d --name=php_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/php:8.2.22-fpm-custom
-
-podman run --pod=appz -d --name=nginx_debian -p 80:80/tcp -p 443:443/tcp -p 443:443/udp localhost/php:8.2.22-fpm-custom
-
-
-
 
 
 
@@ -37,8 +37,17 @@ podman ps -a --pod
 
 podman rm -f php_debian nginx_debian
 
-podman run --pod=appz -d --name=php_debian localhost/php:8.2.22-fpm-custom
-
 podman run --pod=appz -d --name=nginx_debian localhost/nginx:1.27.1-debian-custom
 
+podman run --pod=appz -d --name=php_debian localhost/php:8.2.22-fpm-custom
+
+
 podman logs -f nginx_debian php_debian
+
+
+
+
+
+
+podman rm -f php_debian nginx_debian
+

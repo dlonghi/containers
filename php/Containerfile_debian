@@ -90,6 +90,28 @@ RUN apt-get update && apt-get upgrade -y \
   && apt-get install -y --no-install-recommends --no-install-suggests default-jre \
   && apt-get autoremove -y && apt-get clean
 
+
+
+# https://gist.github.com/whoilo/42ce52af2378f6b4bf859457fdfeab2b
+# https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html
+RUN apt-get install libaio1 libaio-dev -y \
+ && export OC_BASE=https://download.oracle.com/otn_software/linux/instantclient/2350000 \
+ && export OC_BASIC=instantclient-basic-linux.x64-23.5.0.24.07.zip \
+ && export OC_SDK=instantclient-sdk-linux.x64-23.5.0.24.07.zip \
+ && mkdir /opt/oracle \
+ && curl -LkO --output-dir /opt/oracle "$OC_BASE/$OC_BASIC" \
+ && curl -LkO --output-dir /opt/oracle "$OC_BASE/$OC_SDK" \
+ && unzip -o /opt/oracle/$OC_BASIC -d /opt/oracle \
+ && unzip -o /opt/oracle/$OC_SDK -d /opt/oracle \
+ && rm -rf /opt/oracle/$OC_BASIC /opt/oracle/$OC_SDK /opt/oracle/META-INF \
+ && echo '/opt/oracle/instantclient_23_5/' > /etc/ld.so.conf.d/oracle.conf && ldconfig \
+ && apt-get autoremove -y && apt-get clean \
+ && echo "instantclient,/opt/oracle/instantclient_23_5" | pecl install oci8 \
+ && docker-php-ext-enable oci8 \
+ && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_23_5,23.4 \
+ && docker-php-ext-install pdo_oci
+
+
 RUN mkdir -p /app/public \
   && echo '<?php echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; echo "<pre>"; echo "phpinfo"; echo "</pre>"; phpinfo(); echo "<pre>"; echo "xdebug_info"; echo "</pre>"; xdebug_info();' > /app/public/phpinfo.php \
   && sed -i 's/^access.log = /;access.log = /g' /usr/local/etc/php-fpm.d/docker.conf
