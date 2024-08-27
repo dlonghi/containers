@@ -44,10 +44,5 @@ podman run --pod=appz -d --name=php_debian localhost/php:8.2.22-fpm-custom
 
 podman logs -f nginx_debian php_debian
 
-
-
-
-
-
 podman rm -f php_debian nginx_debian
 
