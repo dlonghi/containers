@@ -71,6 +71,7 @@ RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://raw.gith
                        enable-memcached-lz4="yes" \
                        with-system-fastlz="no"' \
       memcached \
+      && docker-php-ext-enable memcached \
  && pecl install --onlyreqdeps \
    --configureoptions='enable-redis-igbinary="yes" \
                        enable-redis-lzf="yes" \
@@ -90,8 +91,9 @@ RUN apt-get update && apt-get upgrade -y \
   && apt-get autoremove -y && apt-get clean
 
 RUN mkdir -p /app/public \
-  && echo '<?php echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; phpinfo(); xdebug_info();' > /app/public/phpinfo.php
+  && echo '<?php echo "<pre>"; print_r(get_defined_vars()); echo "</pre>"; echo "<pre>"; echo "phpinfo"; echo "</pre>"; phpinfo(); echo "<pre>"; echo "xdebug_info"; echo "</pre>"; xdebug_info();' > /app/public/phpinfo.php \
+  && sed -i 's/^access.log = /;access.log = /g' /usr/local/etc/php-fpm.d/docker.conf
 
 RUN docker-php-ext-enable xdebug
 
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+#RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
