@@ -30,19 +30,21 @@ https://github.com/eriksjolund/podman-nginx-socket-activation
 
 
 
-podman pod create --name=appz -p 80:80/tcp -p 443:443/tcp -p 443:443/udp
+#podman pod create --name=appz -p 80:80/tcp -p 443:443/tcp -p 443:443/udp
+podman pod create --name=eproc --net=host
 podman pod ps
 podman ps -a --pod
 
 
 podman rm -f php_debian nginx_debian
 
-podman run --pod=appz -d --name=nginx_debian localhost/nginx:1.27.1-debian-custom
+podman run --pod=eproc -d --name=nginx_debian -v /opt/eprocv2:/opt/eprocv2 localhost/nginx:1.27.1-debian-custom
 
-podman run --pod=appz -d --name=php_debian localhost/php:8.2.22-fpm-custom
+podman run --pod=eproc -d -v /opt/eprocv2:/opt/eprocv2 --name=php_debian localhost/php:8.2.22-fpm-custom
 
 
 podman logs -f nginx_debian php_debian
 
 podman rm -f php_debian nginx_debian
+
 
