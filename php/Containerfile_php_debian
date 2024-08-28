@@ -1,0 +1,170 @@
+FROM docker.io/php:8.2.22-fpm
+
+### Certificado CheckpointCA 2019-2024 TRF2 (proxy ssl inspection)
+RUN cat <<'EOF' > /usr/local/share/ca-certificates/CheckpointCA.crt
+-----BEGIN CERTIFICATE-----
+  MIIETjCCAzagAwIBAgIJAKJP27HcELH1MA0GCSqGSIb3DQEBCwUAMHcxCzAJBgNV
+  BAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UEBxMOUmlvIGRl
+  IEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVtZTEWMBQGA1UE
+  AxMNQ2hlY2tQb2ludC1DQTAeFw0xOTAyMDUxODA1MjNaFw0yNDAyMDQxODA1MjNa
+  MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UE
+  BxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVt
+  ZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQTCCASIwDQYJKoZIhvcNAQEBBQADggEP
+  ADCCAQoCggEBAKkzEcV6dzHLRr0VkcpLXgJz7zNNqpdAbFQRwhM110STjynMbYUo
+  ffoGKlfDXnAKGZKVbkUtCmsDr1QM2JiR8NMQSU9a7pHDmWoqzKxG9mWCXLkR+/Hj
+  zgRKK+IcHgREHUafrCH+7I3RxdBfJ91kqNNdpHPV8P6BSO8Dic9qOQ/Jychda6oK
+  8bi8otWLf9CXjiD4C6nQXrUc32PgN6hAnrklmBkKd4ASq1KfT7WmQzaHZg0zJ6Y+
+  Ad6rMmPqqPcELDpJ/Jwjx5FnJadez8TD4Dnt34s6ux8ZAEX5QXJrINObgr1zmBvc
+  IfZg8sdk9aYJy8L0qfGC3W65dM24oYN9xLUCAwEAAaOB3DCB2TAdBgNVHQ4EFgQU
+  knvkCgcPYLzT6qqf6ibT0P34/DAwgakGA1UdIwSBoTCBnoAUknvkCgcPYLzT6qqf
+  6ibT0P34/DChe6R5MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFu
+  ZWlybzEXMBUGA1UEBxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzAN
+  BgNVBAsTBkNvcmVtZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQYIJAKJP27HcELH1
+  MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBABUWQJ3+Zsley7tX9ypq
+  g9c+dJWAgpzfonZkZE0s+BPZ5N0Ne4eqYuObJLZ7c5Z6MqvkB7swd69LNTsheC3q
+  bsar9ubwHZdxd5+mygXUNyHimx6rcA3+hUNkTQfbv80AnEtqVfiGZj4L/Y9MKFKc
+  eboMMleHpkoSLgq+xgpcHi4WZFVavvLDC7qRJCYvE/t7Ge4L5RDYwuwseK3QpC9F
+  HBifpksEXNsqxTlTf3FyToWul/C5Idc+mdHBJ9KeQ/e3J8Smj/4KmQYdWzP3vbZi
+  Vkve4ikzEYtkPhZ86GITiLhQWeGHtiP+AN2UbP0+8ZIhd7eEzcxNNlh2XNDuM3aR
+  CAM=
+  -----END CERTIFICATE-----
+EOF \
+ && update-ca-certificates
+
+#RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://xxx.yyy.zzz/CheckpointCA_2019-2024.crt \
+# && update-ca-certificates
+
+
+RUN apt-get update && apt-get upgrade -y \
+ && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
+ && echo America/Sao_Paulo > /etc/timezone \
+ && usermod -u 12000 www-data \
+ && groupmod -g 12000 www-data \
+ && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
+   build-essential \
+   git \
+   curl \
+   zip \
+   unzip \
+   ssmtp \
+   gawk \
+   libz-dev \
+   libzip-dev \
+   libbz2-dev \
+   liblzf-dev \
+   liblz4-dev \
+   libzstd-dev \
+   libssl-dev \
+   libfreetype-dev \
+   libjpeg62-turbo-dev \
+   libwebp-dev \
+   libpng-dev \
+   libavif-dev \
+   libxpm-dev \
+   libgd-dev \
+   libmagickwand-dev \
+   libpq-dev \
+   libmemcached-dev \
+   libxml2-dev \
+   libxslt-dev \
+   libyaml-dev \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+ && docker-php-ext-install -j$(nproc) gd \
+ && docker-php-ext-install soap \
+ && docker-php-ext-install bcmath \
+ && docker-php-ext-install mysqli \
+ && docker-php-ext-install pdo_mysql \
+ && docker-php-ext-install pdo_pgsql \
+ && docker-php-ext-install zip \
+ && docker-php-ext-install opcache \
+ && docker-php-ext-install xsl \
+ && docker-php-ext-install bz2 \
+ && docker-php-ext-install exif \
+ && docker-php-ext-install gettext \
+ && docker-php-ext-install calendar \
+ && docker-php-ext-install intl \
+ && docker-php-ext-install shmop \
+ && docker-php-ext-install sockets \
+ && docker-php-ext-install sysvmsg \
+ && docker-php-ext-install sysvsem \
+ && docker-php-ext-install sysvshm \
+ && pecl install msgpack && docker-php-ext-enable msgpack \
+ && pecl install imagick && docker-php-ext-enable imagick \
+ && pecl install igbinary && docker-php-ext-enable igbinary \
+ && pecl install --onlyreqdeps \
+   --configureoptions='enable-memcached-sasl="no" \
+                       enable-memcached-session="yes" \
+                       enable-memcached-igbinary="yes" \
+                       enable-memcached-json="yes" \
+                       enable-memcached-msgpack="yes" \
+                       enable-memcached-lzf="yes" \
+                       enable-memcached-zstd="yes" \
+                       enable-memcached-lz4="yes" \
+                       with-system-fastlz="no"' \
+      memcached && docker-php-ext-enable memcached \
+ && pecl install --onlyreqdeps \
+   --configureoptions='enable-redis-igbinary="yes" \
+                       enable-redis-lzf="yes" \
+                       enable-redis-zstd="yes" \
+                       enable-redis-lz4="yes"' \
+      redis && docker-php-ext-enable redis \
+ && pecl install xdebug \
+ && apt-get purge build-essential -y && apt-get autoremove -y && apt-get clean
+
+
+RUN curl -LkO --output-dir /tmp https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-3/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
+ && apt install -y /tmp/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb \
+ && rm -rf /tmp/wkhtmltox_0.12.6.1-3.bookworm_amd64.deb
+
+
+RUN apt-get update && apt-get upgrade -y \
+ && apt-get install -y --no-install-recommends --no-install-suggests default-jre \
+ && apt-get autoremove -y && apt-get clean
+
+
+ # https://gist.github.com/whoilo/42ce52af2378f6b4bf859457fdfeab2b
+# https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html
+RUN apt-get install libaio1 libaio-dev -y \
+ && export OC_BASE=https://download.oracle.com/otn_software/linux/instantclient/2350000 \
+ && export OC_BASIC=instantclient-basic-linux.x64-23.5.0.24.07.zip \
+ && export OC_SDK=instantclient-sdk-linux.x64-23.5.0.24.07.zip \
+ && mkdir /opt/oracle \
+ && curl -LkO --output-dir /opt/oracle "$OC_BASE/$OC_BASIC" \
+ && curl -LkO --output-dir /opt/oracle "$OC_BASE/$OC_SDK" \
+ && unzip -o /opt/oracle/$OC_BASIC -d /opt/oracle \
+ && unzip -o /opt/oracle/$OC_SDK -d /opt/oracle \
+ && rm -rf /opt/oracle/$OC_BASIC /opt/oracle/$OC_SDK /opt/oracle/META-INF \
+ && echo '/opt/oracle/instantclient_23_5/' > /etc/ld.so.conf.d/oracle.conf && ldconfig \
+ && apt-get autoremove -y && apt-get clean \
+ && echo "instantclient,/opt/oracle/instantclient_23_5" | pecl install oci8 \
+ && docker-php-ext-enable oci8 \
+ && docker-php-ext-configure pdo_oci --with-pdo-oci=instantclient,/opt/oracle/instantclient_23_5,23.5 \
+ && docker-php-ext-install pdo_oci
+
+
+RUN mkdir -p /app/public \
+ && cat <<'EOF' > /app/public/phpinfo.php
+<?php
+echo "<pre>";
+print_r(get_defined_vars());
+echo "</pre>";
+echo "<pre>phpinfo</pre>";
+phpinfo();
+echo "<pre>xdebug_info</pre>";
+xdebug_info();
+EOF
+
+ 
+#RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
+ && docker-php-ext-enable xdebug \
+
+
+## eproc e outros apps infraphp do TRF4
+RUN sed -i 's/^default_charset = "UTF-8"/default_charset = "ISO-8859-1"/g' "$PHP_INI_DIR/php.ini" \
+ && sed -i 's/^;date.timezone =/date.timezone = "America\/Sao_Paulo"/g' "$PHP_INI_DIR/php.ini" \
+ && sed -i 's/^short_open_tag = Off/short_open_tag = On/g' "$PHP_INI_DIR/php.ini" \
+ && sed -i 's/^access.log = /;access.log = /g' /usr/local/etc/php-fpm.d/docker.conf
+# obs: nginx.conf com chartset ISO-8859-1 NAO funcionou
+# o campo de digiar senha na pagina inicial eproc ficou louco.
+# foi necessario deixar chartset UTF-8;
