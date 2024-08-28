@@ -1,14 +1,40 @@
 
+podman pod create --name=eproc --net=host
+podman pod ps
+podman ps -a --pod
 
-### Debian container
-
-# podman rmi -f docker.io/library/php:8.2.22
 
 podman rmi -f localhost/php:8.2.22-fpm-custom
+podman build -t localhost/php:8.2.22-fpm-custom -f /opt/containers/eproc/php/Containerfile_php_debian
 
-podman rmi -f b9413712cfd2
 
-podman build -t localhost/php:8.2.22-fpm-custom -f Containerfile_debian
+podman rmi -f localhost/nginx:1.27.1-debian-custom
+podman build -t localhost/nginx:1.27.1-debian-custom -f /opt/containers/eproc/nginx/Containerfile_nginx_debian
+
+
+podman rm -f php_debian
+podman run --pod=eproc -d -v /opt/eprocv2:/opt/eprocv2 --name=php_debian localhost/php:8.2.22-fpm-custom
+
+podman rm -f nginx_debian
+podman run --pod=eproc -d --name=nginx_debian -v /opt/containers/eproc/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/eprocv2:/opt/eprocv2 localhost/nginx:1.27.1-debian-custom
+
+podman logs -f nginx_debian php_debian | sed G
+
+
+
+
+podman exec -it nginx_debian bash
+nginx -T
+
+
+podman exec -it php_debian bash
+
+
+
+
+
+
+
 
 
 # Interesting
@@ -19,31 +45,3 @@ https://github.com/eriksjolund/podman-nginx-socket-activation
 ## https://www.reddit.com/r/podman/comments/14lls6v/same_ip_address_for_all_incoming_connections_in
 # --network slirp4netns:port_handler=slirp4netns
 
-
-
-
-
-podman pod create --name=eproc --net=host
-podman pod ps
-podman ps -a --pod
-
-
-podman rm -f nginx_debian
-podman run --pod=eproc -d --name=nginx_debian -v /opt/containers/eproc/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/eprocv2:/opt/eprocv2 localhost/nginx:1.27.1-debian-custom
-
-
-podman rm -f php_debian
-podman run --pod=eproc -d -v /opt/eprocv2:/opt/eprocv2 --name=php_debian -v /opt/eprocv2:/opt/eprocv2 localhost/php:8.2.22-fpm-custom
-
-
-podman logs -f nginx_debian php_debian | sed G
-
-
-
-podman exec -it nginx_debian bash
-
-nginx -T
-
-
-
-podman rm -f php_debian nginx_debian
