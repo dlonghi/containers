@@ -1,41 +1,40 @@
 FROM docker.io/php:8.2.22-fpm
 
 ### Certificado CheckpointCA 2019-2024 TRF2 (proxy ssl inspection)
-RUN cat <<'EOF' > /usr/local/share/ca-certificates/CheckpointCA.crt
+COPY <<'EOF' /usr/local/share/ca-certificates/CheckpointCA.crt
 -----BEGIN CERTIFICATE-----
-  MIIETjCCAzagAwIBAgIJAKJP27HcELH1MA0GCSqGSIb3DQEBCwUAMHcxCzAJBgNV
-  BAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UEBxMOUmlvIGRl
-  IEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVtZTEWMBQGA1UE
-  AxMNQ2hlY2tQb2ludC1DQTAeFw0xOTAyMDUxODA1MjNaFw0yNDAyMDQxODA1MjNa
-  MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UE
-  BxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVt
-  ZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-  ADCCAQoCggEBAKkzEcV6dzHLRr0VkcpLXgJz7zNNqpdAbFQRwhM110STjynMbYUo
-  ffoGKlfDXnAKGZKVbkUtCmsDr1QM2JiR8NMQSU9a7pHDmWoqzKxG9mWCXLkR+/Hj
-  zgRKK+IcHgREHUafrCH+7I3RxdBfJ91kqNNdpHPV8P6BSO8Dic9qOQ/Jychda6oK
-  8bi8otWLf9CXjiD4C6nQXrUc32PgN6hAnrklmBkKd4ASq1KfT7WmQzaHZg0zJ6Y+
-  Ad6rMmPqqPcELDpJ/Jwjx5FnJadez8TD4Dnt34s6ux8ZAEX5QXJrINObgr1zmBvc
-  IfZg8sdk9aYJy8L0qfGC3W65dM24oYN9xLUCAwEAAaOB3DCB2TAdBgNVHQ4EFgQU
-  knvkCgcPYLzT6qqf6ibT0P34/DAwgakGA1UdIwSBoTCBnoAUknvkCgcPYLzT6qqf
-  6ibT0P34/DChe6R5MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFu
-  ZWlybzEXMBUGA1UEBxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzAN
-  BgNVBAsTBkNvcmVtZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQYIJAKJP27HcELH1
-  MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBABUWQJ3+Zsley7tX9ypq
-  g9c+dJWAgpzfonZkZE0s+BPZ5N0Ne4eqYuObJLZ7c5Z6MqvkB7swd69LNTsheC3q
-  bsar9ubwHZdxd5+mygXUNyHimx6rcA3+hUNkTQfbv80AnEtqVfiGZj4L/Y9MKFKc
-  eboMMleHpkoSLgq+xgpcHi4WZFVavvLDC7qRJCYvE/t7Ge4L5RDYwuwseK3QpC9F
-  HBifpksEXNsqxTlTf3FyToWul/C5Idc+mdHBJ9KeQ/e3J8Smj/4KmQYdWzP3vbZi
-  Vkve4ikzEYtkPhZ86GITiLhQWeGHtiP+AN2UbP0+8ZIhd7eEzcxNNlh2XNDuM3aR
-  CAM=
-  -----END CERTIFICATE-----
-EOF \
- && update-ca-certificates
+MIIETjCCAzagAwIBAgIJAKJP27HcELH1MA0GCSqGSIb3DQEBCwUAMHcxCzAJBgNV
+BAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UEBxMOUmlvIGRl
+IEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVtZTEWMBQGA1UE
+AxMNQ2hlY2tQb2ludC1DQTAeFw0xOTAyMDUxODA1MjNaFw0yNDAyMDQxODA1MjNa
+MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UE
+BxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVt
+ZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQTCCASIwDQYJKoZIhvcNAQEBBQADggEP
+ADCCAQoCggEBAKkzEcV6dzHLRr0VkcpLXgJz7zNNqpdAbFQRwhM110STjynMbYUo
+ffoGKlfDXnAKGZKVbkUtCmsDr1QM2JiR8NMQSU9a7pHDmWoqzKxG9mWCXLkR+/Hj
+zgRKK+IcHgREHUafrCH+7I3RxdBfJ91kqNNdpHPV8P6BSO8Dic9qOQ/Jychda6oK
+8bi8otWLf9CXjiD4C6nQXrUc32PgN6hAnrklmBkKd4ASq1KfT7WmQzaHZg0zJ6Y+
+Ad6rMmPqqPcELDpJ/Jwjx5FnJadez8TD4Dnt34s6ux8ZAEX5QXJrINObgr1zmBvc
+IfZg8sdk9aYJy8L0qfGC3W65dM24oYN9xLUCAwEAAaOB3DCB2TAdBgNVHQ4EFgQU
+knvkCgcPYLzT6qqf6ibT0P34/DAwgakGA1UdIwSBoTCBnoAUknvkCgcPYLzT6qqf
+6ibT0P34/DChe6R5MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFu
+ZWlybzEXMBUGA1UEBxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzAN
+BgNVBAsTBkNvcmVtZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQYIJAKJP27HcELH1
+MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBABUWQJ3+Zsley7tX9ypq
+g9c+dJWAgpzfonZkZE0s+BPZ5N0Ne4eqYuObJLZ7c5Z6MqvkB7swd69LNTsheC3q
+bsar9ubwHZdxd5+mygXUNyHimx6rcA3+hUNkTQfbv80AnEtqVfiGZj4L/Y9MKFKc
+eboMMleHpkoSLgq+xgpcHi4WZFVavvLDC7qRJCYvE/t7Ge4L5RDYwuwseK3QpC9F
+HBifpksEXNsqxTlTf3FyToWul/C5Idc+mdHBJ9KeQ/e3J8Smj/4KmQYdWzP3vbZi
+Vkve4ikzEYtkPhZ86GITiLhQWeGHtiP+AN2UbP0+8ZIhd7eEzcxNNlh2XNDuM3aR
+CAM=
+-----END CERTIFICATE-----
+EOF
 
 #RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://xxx.yyy.zzz/CheckpointCA_2019-2024.crt \
 # && update-ca-certificates
 
 
-RUN apt-get update && apt-get upgrade -y \
+RUN update-ca-certificates && apt-get update && apt-get upgrade -y \
  && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
  && echo America/Sao_Paulo > /etc/timezone \
  && usermod -u 12000 www-data \
@@ -154,10 +153,10 @@ echo "<pre>xdebug_info</pre>";
 xdebug_info();
 EOF
 
- 
+
 #RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
- && docker-php-ext-enable xdebug \
+ && docker-php-ext-enable xdebug
 
 
 ## eproc e outros apps infraphp do TRF4
