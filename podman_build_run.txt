@@ -4,10 +4,12 @@ podman pod ps
 podman ps -a --pod
 
 
+############# php
 podman rmi -f localhost/php:8.2.22-fpm-custom
 podman build -t localhost/php:8.2.22-fpm-custom -f /opt/containers/eproc/php/Containerfile_php_debian
 
 
+############# nginx
 podman rmi -f localhost/nginx:1.27.1-debian-custom
 podman build -t localhost/nginx:1.27.1-debian-custom -f /opt/containers/eproc/nginx/Containerfile_nginx_debian
 
