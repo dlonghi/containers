@@ -121,4 +121,5 @@ RUN docker-php-ext-enable xdebug
 #RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini" \
  && sed -i 's/^default_charset = "UTF-8"/default_charset = "ISO-8859-1"/g' "$PHP_INI_DIR/php.ini" \
- && sed -i 's/^;date.timezone =/date.timezone = "America/Sao_Paulo"/g' "$PHP_INI_DIR/php.ini"
+ && sed -i 's/^;date.timezone =/date.timezone = "America\/Sao_Paulo"/g' "$PHP_INI_DIR/php.ini" \
+ && sed -i 's/^short_open_tag = Off/short_open_tag = On/g' "$PHP_INI_DIR/php.ini"
