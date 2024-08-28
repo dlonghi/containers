@@ -38,7 +38,7 @@ RUN apt-get update && apt-get upgrade -y \
  && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
  && echo America/Sao_Paulo > /etc/timezone \
  && groupmod -g 12000 www-data \
- && usermod -u 12000 -g 12000 www-data
+ && usermod -u 12000 -g 12000 www-data \
  && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
    build-essential \
    git \
@@ -121,7 +121,7 @@ RUN apt-get update && apt-get upgrade -y \
  && apt-get autoremove -y && apt-get clean
 
 
- # https://gist.github.com/whoilo/42ce52af2378f6b4bf859457fdfeab2b
+# https://gist.github.com/whoilo/42ce52af2378f6b4bf859457fdfeab2b
 # https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html
 RUN apt-get install libaio1 libaio-dev -y \
  && export OC_BASE=https://download.oracle.com/otn_software/linux/instantclient/2350000 \
