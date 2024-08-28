@@ -1,44 +1,44 @@
 FROM docker.io/php:8.2.22-fpm
 
-### Certificado CheckpointCA 2019-2024 TRF2 (proxy ssl inspection)
-COPY <<'EOF' /usr/local/share/ca-certificates/CheckpointCA.crt
+### Certificado CheckpointCA 2013-2028 TRF2
+### so that the container can access internet thru proxy ssl inspection
+RUN cat <<'EOF' > /usr/local/share/ca-certificates/CheckpointCA_2023-2028.crt && update-ca-certificates
 -----BEGIN CERTIFICATE-----
-MIIETjCCAzagAwIBAgIJAKJP27HcELH1MA0GCSqGSIb3DQEBCwUAMHcxCzAJBgNV
+MIIESzCCAzOgAwIBAgIJAL/7wXSR/OrTMA0GCSqGSIb3DQEBCwUAMHYxCzAJBgNV
 BAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UEBxMOUmlvIGRl
-IEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVtZTEWMBQGA1UE
-AxMNQ2hlY2tQb2ludC1DQTAeFw0xOTAyMDUxODA1MjNaFw0yNDAyMDQxODA1MjNa
-MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UE
-BxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzANBgNVBAsTBkNvcmVt
-ZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQTCCASIwDQYJKoZIhvcNAQEBBQADggEP
-ADCCAQoCggEBAKkzEcV6dzHLRr0VkcpLXgJz7zNNqpdAbFQRwhM110STjynMbYUo
-ffoGKlfDXnAKGZKVbkUtCmsDr1QM2JiR8NMQSU9a7pHDmWoqzKxG9mWCXLkR+/Hj
-zgRKK+IcHgREHUafrCH+7I3RxdBfJ91kqNNdpHPV8P6BSO8Dic9qOQ/Jychda6oK
-8bi8otWLf9CXjiD4C6nQXrUc32PgN6hAnrklmBkKd4ASq1KfT7WmQzaHZg0zJ6Y+
-Ad6rMmPqqPcELDpJ/Jwjx5FnJadez8TD4Dnt34s6ux8ZAEX5QXJrINObgr1zmBvc
-IfZg8sdk9aYJy8L0qfGC3W65dM24oYN9xLUCAwEAAaOB3DCB2TAdBgNVHQ4EFgQU
-knvkCgcPYLzT6qqf6ibT0P34/DAwgakGA1UdIwSBoTCBnoAUknvkCgcPYLzT6qqf
-6ibT0P34/DChe6R5MHcxCzAJBgNVBAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFu
-ZWlybzEXMBUGA1UEBxMOUmlvIGRlIEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDzAN
-BgNVBAsTBkNvcmVtZTEWMBQGA1UEAxMNQ2hlY2tQb2ludC1DQYIJAKJP27HcELH1
-MAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBABUWQJ3+Zsley7tX9ypq
-g9c+dJWAgpzfonZkZE0s+BPZ5N0Ne4eqYuObJLZ7c5Z6MqvkB7swd69LNTsheC3q
-bsar9ubwHZdxd5+mygXUNyHimx6rcA3+hUNkTQfbv80AnEtqVfiGZj4L/Y9MKFKc
-eboMMleHpkoSLgq+xgpcHi4WZFVavvLDC7qRJCYvE/t7Ge4L5RDYwuwseK3QpC9F
-HBifpksEXNsqxTlTf3FyToWul/C5Idc+mdHBJ9KeQ/e3J8Smj/4KmQYdWzP3vbZi
-Vkve4ikzEYtkPhZ86GITiLhQWeGHtiP+AN2UbP0+8ZIhd7eEzcxNNlh2XNDuM3aR
-CAM=
------END CERTIFICATE-----
+IEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDTALBgNVBAsTBFRSRjIxFzAVBgNVBAMT
+DkNoZWNrUG9pbnQyMDIzMB4XDTIzMDkxODIxNTYyOVoXDTI4MDkxNjIxNTYyOVow
+djELMAkGA1UEBhMCQlIxFzAVBgNVBAgTDlJpbyBkZSBKYW5laXJvMRcwFQYDVQQH
+Ew5SaW8gZGUgSmFuZWlybzENMAsGA1UEChMEVFJGMjENMAsGA1UECxMEVFJGMjEX
+MBUGA1UEAxMOQ2hlY2tQb2ludDIwMjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDlgjjY8aRM4ACpE9Tg9epr/PiU590X0lsdHkXWgn7nZPabgxeWW9VR
+FfhXVlJodELCPe7LOA+CkhErADujEmWlhe/gAipo89F9YpCwZUszYoPx+wZwy7K3
+G6/0TLTqhPhYR3ApvNhrC3J9ETKINdI0XvPpIyJ45F1Kg82Zdhx25z9DtwcGIBTA
+u0CmeLG+B6npzv3cbkCn9VzM17cPa1BOXLL4PSGelpOnTNjagcsI09SvWTvMgQwG
+S3yMZ72lVBnxnpO+hE5R4OQ8svwJohYu+CBuMFIdwPPOMXfzwN3iDxl08bB8auaH
+AQnbGxBiIGslyzimlWECSLpPcH0+Zjc9AgMBAAGjgdswgdgwHQYDVR0OBBYEFKUV
+fYzNW4PIee36NOKa7EVJN+a7MIGoBgNVHSMEgaAwgZ2AFKUVfYzNW4PIee36NOKa
+7EVJN+a7oXqkeDB2MQswCQYDVQQGEwJCUjEXMBUGA1UECBMOUmlvIGRlIEphbmVp
+cm8xFzAVBgNVBAcTDlJpbyBkZSBKYW5laXJvMQ0wCwYDVQQKEwRUUkYyMQ0wCwYD
+VQQLEwRUUkYyMRcwFQYDVQQDEw5DaGVja1BvaW50MjAyM4IJAL/7wXSR/OrTMAwG
+A1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAJJUdsRTL5+J905xSnSBsjFu
+wbs7gHLh7yqgJd9ZvtEMaMAdjD9zqdTcvaMAu3zfjN0pCZneuJZGjL+qAOalyN70
+atG/je1Hheh5au4le6BjF5vnJemPGimgkPenGHmu1eZHTW/ljh1wpmVWptR+1Cyl
+tYgdFOHscjIVkhcY65t7ZmrPjn0M7LpCwg3+Pf8zRWdABJFW3N+/fqsgcOvqJpqE
+IYQqaUr1LCoSES8dT4xfkb4mjXzk8+YzBmPODxIprCGzyx8ym+mDI5+Uwlm+S9Ci
+k5/GyUpjoKwyFBDCSSr55RA67sFboOhObnr4BMe49oRolJKzuQOXDGM9R5TC4Q4=
+-----END CERTIFICATE-----  
 EOF
 
-#RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://xxx.yyy.zzz/CheckpointCA_2019-2024.crt \
+#RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA_2023-2028.crt https://gist.githubusercontent.com/dlonghi/d8773e677b34a937bf159b50f259478e/raw/CheckpointCA_2023-2028.crt \
 # && update-ca-certificates
 
 
-RUN update-ca-certificates && apt-get update && apt-get upgrade -y \
+RUN apt-get update && apt-get upgrade -y \
  && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
  && echo America/Sao_Paulo > /etc/timezone \
- && usermod -u 12000 www-data \
  && groupmod -g 12000 www-data \
+ && usermod -u 12000 -g 12000 www-data
  && apt-get update && apt-get install -y --no-install-recommends --no-install-suggests \
    build-essential \
    git \

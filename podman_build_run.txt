@@ -5,20 +5,21 @@ podman ps -a --pod
 
 
 ############# php
-podman rmi -f localhost/php:8.2.22-fpm-custom
-podman build -t localhost/php:8.2.22-fpm-custom -f /opt/containers/eproc/php/Containerfile_php_debian
+podman rmi -f localhost/php:8.2.22-fpm-eproc
+podman build -t localhost/php:8.2.22-fpm-eproc -f /opt/containers/eproc/php/Containerfile_php_debian_eproc
 
 
 ############# nginx
 podman rmi -f localhost/nginx:1.27.1-debian-custom
-podman build -t localhost/nginx:1.27.1-debian-custom -f /opt/containers/eproc/nginx/Containerfile_nginx_debian
+podman rmi -f localhost/nginx:1.27.1-eproc
+podman build -t localhost/nginx:1.27.1-eproc -f /opt/containers/eproc/nginx/Containerfile_nginx_debian_eproc
 
 
 podman rm -f php_debian
-podman run --pod=eproc -d -v /opt/eprocv2:/opt/eprocv2 --name=php_debian localhost/php:8.2.22-fpm-custom
+podman run --pod=eproc -d -v /opt/eprocv2:/opt/eprocv2 --name=php_debian localhost/php:8.2.22-fpm-eproc
 
 podman rm -f nginx_debian
-podman run --pod=eproc -d --name=nginx_debian -v /opt/containers/eproc/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/eprocv2:/opt/eprocv2 localhost/nginx:1.27.1-debian-custom
+podman run --pod=eproc -d --name=nginx_debian -v /opt/containers/eproc/nginx/nginx.conf:/etc/nginx/nginx.conf -v /opt/eprocv2:/opt/eprocv2 localhost/nginx:1.27.1-eproc
 
 podman logs -f nginx_debian php_debian | sed G
 

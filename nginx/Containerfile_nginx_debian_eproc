@@ -1,16 +1,50 @@
 FROM docker.io/nginx:1.27.1
 
-RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA.crt https://raw.githubusercontent.com/dlonghi/containers/main/CheckpointCA.crt \
- && update-ca-certificates \
- && apt-get update && apt-get upgrade -y \
- && apt-get autoremove -y && apt-get clean \
- && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && echo America/Sao_Paulo > /etc/timezone \
- && mkdir /opt/certs \
- && openssl req -new -x509 -sha512 -nodes -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -subj "/C=BR/ST=DF/L=Brasilia/CN=*.localhost/O=None" -addext "subjectAltName = DNS:localhost, DNS:127.0.0.1" -keyout /opt/certs/server.key -out /opt/certs/server.crt -days 3650 \
+### Certificado CheckpointCA 2013-2028 TRF2
+### so that the container can access internet thru proxy ssl inspection
+RUN cat <<'EOF' > /usr/local/share/ca-certificates/CheckpointCA_2023-2028.crt && update-ca-certificates
+-----BEGIN CERTIFICATE-----
+MIIESzCCAzOgAwIBAgIJAL/7wXSR/OrTMA0GCSqGSIb3DQEBCwUAMHYxCzAJBgNV
+BAYTAkJSMRcwFQYDVQQIEw5SaW8gZGUgSmFuZWlybzEXMBUGA1UEBxMOUmlvIGRl
+IEphbmVpcm8xDTALBgNVBAoTBFRSRjIxDTALBgNVBAsTBFRSRjIxFzAVBgNVBAMT
+DkNoZWNrUG9pbnQyMDIzMB4XDTIzMDkxODIxNTYyOVoXDTI4MDkxNjIxNTYyOVow
+djELMAkGA1UEBhMCQlIxFzAVBgNVBAgTDlJpbyBkZSBKYW5laXJvMRcwFQYDVQQH
+Ew5SaW8gZGUgSmFuZWlybzENMAsGA1UEChMEVFJGMjENMAsGA1UECxMEVFJGMjEX
+MBUGA1UEAxMOQ2hlY2tQb2ludDIwMjMwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAw
+ggEKAoIBAQDlgjjY8aRM4ACpE9Tg9epr/PiU590X0lsdHkXWgn7nZPabgxeWW9VR
+FfhXVlJodELCPe7LOA+CkhErADujEmWlhe/gAipo89F9YpCwZUszYoPx+wZwy7K3
+G6/0TLTqhPhYR3ApvNhrC3J9ETKINdI0XvPpIyJ45F1Kg82Zdhx25z9DtwcGIBTA
+u0CmeLG+B6npzv3cbkCn9VzM17cPa1BOXLL4PSGelpOnTNjagcsI09SvWTvMgQwG
+S3yMZ72lVBnxnpO+hE5R4OQ8svwJohYu+CBuMFIdwPPOMXfzwN3iDxl08bB8auaH
+AQnbGxBiIGslyzimlWECSLpPcH0+Zjc9AgMBAAGjgdswgdgwHQYDVR0OBBYEFKUV
+fYzNW4PIee36NOKa7EVJN+a7MIGoBgNVHSMEgaAwgZ2AFKUVfYzNW4PIee36NOKa
+7EVJN+a7oXqkeDB2MQswCQYDVQQGEwJCUjEXMBUGA1UECBMOUmlvIGRlIEphbmVp
+cm8xFzAVBgNVBAcTDlJpbyBkZSBKYW5laXJvMQ0wCwYDVQQKEwRUUkYyMQ0wCwYD
+VQQLEwRUUkYyMRcwFQYDVQQDEw5DaGVja1BvaW50MjAyM4IJAL/7wXSR/OrTMAwG
+A1UdEwQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAJJUdsRTL5+J905xSnSBsjFu
+wbs7gHLh7yqgJd9ZvtEMaMAdjD9zqdTcvaMAu3zfjN0pCZneuJZGjL+qAOalyN70
+atG/je1Hheh5au4le6BjF5vnJemPGimgkPenGHmu1eZHTW/ljh1wpmVWptR+1Cyl
+tYgdFOHscjIVkhcY65t7ZmrPjn0M7LpCwg3+Pf8zRWdABJFW3N+/fqsgcOvqJpqE
+IYQqaUr1LCoSES8dT4xfkb4mjXzk8+YzBmPODxIprCGzyx8ym+mDI5+Uwlm+S9Ci
+k5/GyUpjoKwyFBDCSSr55RA67sFboOhObnr4BMe49oRolJKzuQOXDGM9R5TC4Q4=
+-----END CERTIFICATE-----  
+EOF
+
+#RUN curl -sko /usr/local/share/ca-certificates/CheckpointCA_2023-2028.crt https://gist.githubusercontent.com/dlonghi/d8773e677b34a937bf159b50f259478e/raw/CheckpointCA_2023-2028.crt \
+# && update-ca-certificates
+
+
+RUN apt-get update && apt-get upgrade -y \
+ && ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime \
+ && echo America/Sao_Paulo > /etc/timezone \
  && groupmod -g 12000 nginx \
  && usermod -u 12000 -g 12000 nginx
+ && apt-get autoremove -y && apt-get clean \
+ && mkdir /opt/certs \
+ && openssl req -new -x509 -sha512 -nodes -newkey ec -pkeyopt ec_paramgen_curve:secp384r1 -subj "/C=BR/ST=DF/L=Brasilia/CN=*.localhost/O=None" -addext "subjectAltName = DNS:localhost, DNS:127.0.0.1" -keyout /opt/certs/server.key -out /opt/certs/server.crt -days 3650
 
-RUN curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_custom_http3_eproc.conf \
+
+ RUN curl -ko /etc/nginx/nginx.conf https://raw.githubusercontent.com/dlonghi/containers/main/nginx/config/nginx_custom_http3_eproc.conf \
  && mkdir -p /app/public \
  && curl -ko /app/public/index.html https://raw.githubusercontent.com/dlonghi/containers/main/assets/index_flying_lights.html \
  && curl -ko /app/public/favicon.ico https://raw.githubusercontent.com/dlonghi/containers/main/assets/favicon_nginx.ico
