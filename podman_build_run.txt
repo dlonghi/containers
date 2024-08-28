@@ -48,3 +48,6 @@ https://github.com/eriksjolund/podman-nginx-socket-activation
 ## https://www.reddit.com/r/podman/comments/14lls6v/same_ip_address_for_all_incoming_connections_in
 # --network slirp4netns:port_handler=slirp4netns
 
+
+podman build --build-arg="XDEBUG=yes" --build-arg="WKHTMLTOPDF=yes" --build-arg="APM=yes" -t localhost/phpfpm-custom-xdebug:latest -f Containerfile_phpfpm_debian .
+
