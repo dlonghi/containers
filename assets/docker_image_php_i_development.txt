@@ -1,4 +1,3 @@
-root@eproc:/var/www/html# php -i
 phpinfo()
 PHP Version => 8.2.22
 
